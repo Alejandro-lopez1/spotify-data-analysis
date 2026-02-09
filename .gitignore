@@ -1,0 +1,9 @@
+#entorno virtual
+venv/
+
+#archivos del sistema
+__pycache__/
+*.pyc 
+
+#jupiter
+.ipynb_checkpoints/
