@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 tracks_df = pd.read_csv("data/spotify/data.csv")
 
@@ -19,3 +20,18 @@ top_song_per_year = (tracks_df.loc[tracks_df.groupby("year")["popularity"].idxma
 
 print(top_song_per_year[["year", "name", "artists", "popularity"]].head(10))
 print(top_song_per_year.tail(10))
+
+
+#generamos un primer gráfico para tener una idea 
+plt.figure(figsize=(12, 6))
+plt.plot(
+    top_song_per_year["year"],
+    top_song_per_year["popularity"]
+)
+plt.title("Top song popularity by year (Spotify metric)")
+plt.xlabel("Year")
+plt.ylabel("Popularity")
+
+plt.tight_layout()
+plt.savefig("outputs/top_song_popularity_by_year.png")
+plt.close()
