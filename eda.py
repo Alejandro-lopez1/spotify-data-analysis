@@ -35,3 +35,37 @@ plt.ylabel("Popularity")
 plt.tight_layout()
 plt.savefig("outputs/top_song_popularity_by_year.png")
 plt.close()
+
+
+# Convert artists from string to list
+artists_df = tracks_df.copy()
+
+artists_df["artists"] = (
+    artists_df["artists"]
+    .str.replace("[", "", regex=False)
+    .str.replace("]", "", regex=False)
+    .str.replace("'", "", regex=False)
+    .str.split(", ")
+)
+
+artists_df = tracks_df.explode("artists")
+print(artists_df[["name", "artists", "popularity"]].head(10))
+
+artist_popularity_df = (
+    artists_df
+    .groupby("artists")
+    .agg(
+        avg_popularity=("popularity", "mean"),
+        song_count=("name", "count")
+    )
+    .reset_index()
+)
+artist_popularity_df = artist_popularity_df[
+    artist_popularity_df["song_count"] >= 10
+]
+top_artists_df = (
+    artist_popularity_df
+    .sort_values("avg_popularity", ascending=False)
+    .head(10)
+)
+print(top_artists_df)
